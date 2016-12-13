@@ -3,5 +3,6 @@
 *.dvi
 *.log
 *.out
+*.pdf
 *.synctex.gz
 /.ipynb_checkpoints
