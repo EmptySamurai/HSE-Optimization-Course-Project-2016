@@ -3,5 +3,4 @@
 *.dvi
 *.log
 *.synctex.gz
-*.pdf
 /.ipynb_checkpoints
