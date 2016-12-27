@@ -3,6 +3,7 @@ from minimizer import MinimizerMixin
 
 class SimplexSimple(MinimizerMixin):
 
+
     def solve_klee_minty(self, n, maxiter=1000):
         """
         :param n: number of varuable in Klee-Minty cube
