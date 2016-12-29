@@ -12,11 +12,12 @@ def subgr_norm(g, P):    # calculating subgradient normalizer
 
 
 def ellipsoid(n, maxiter, A, b, c):
-    P_init = np.dot(np.identity(n), 1/n)  # questionable, too stupid to find better alts atm
+    P_init = n**2*np.identity(n)  # questionable, too stupid to find better alts atm
     x_init = n*[0]  # modifiable, need to fuck around with it
     k = 0
     x = x_init
     P = P_init
+    kfin = 0
     while k < maxiter:
         feas_test = []  # template list for feasibility test
         for r in range(len(A)):
@@ -33,13 +34,15 @@ def ellipsoid(n, maxiter, A, b, c):
             sgn = A[uf]*subgr_norm(c, P)  # subgrad, normalized
             alpha = np.dot(A[uf], x)*subgr_norm(A[uf], P)  # set the shift param
         x_new = x-(1+n*alpha)/(1+n)*np.dot(P, sgn)  # set the new x
-        if np.norm(x-x_new) < 0.01:  # condition on diff norm: if x stopped moving, we are fine
-            return k
-            break
-        else:
-            x = x_new  # update x for next runs
-            pgmult = np.dot(np.dot(P, np.outer(sgn, sgn)), P)  # matrix mult for ellipse
-            P = n**2/(n**2-1)*(1-alpha**2)*(P-2*(1+n*alpha)/((1+n)*(1+alpha))*pgmult)  # new ellipse shape
-            k += 1
+        x = x_new  # update x for next runs
+        pgmult = np.dot(np.dot(P, np.outer(sgn, sgn)), P)  # matrix mult for ellipse
+        P = n**2/(n**2-1)*(1-alpha**2)*(P-2*(1+n*alpha)/((1+n)*(1+alpha))*pgmult)  # new ellipse shape
+        k += 1
+    return k,x
 
+dim = 6
+a = np.identity(dim)
+b = np.array(dim*[2])
+c = np.array(dim*[1])
+ellipsoid(dim, 100, a, b, c)
 
